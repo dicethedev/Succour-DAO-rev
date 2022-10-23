@@ -52,6 +52,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
     error: prepareError,
     isError: isPrepareError,
   } = usePrepareContractWrite({
+    // @ts-ignore
     address: '0x12F57C67FDd16109B549F0B40579694fE12bf9Fd',
     abi: [
       {
