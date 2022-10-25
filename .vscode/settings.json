@@ -1,8 +1,14 @@
 {
     "cSpell.ignoreWords": [
         "Daddress",
+        "Depositamount",
+        "Gofund",
+        "amountneeded",
         "approvec",
         "celo",
+        "createfund",
+        "fundname",
+        "fundreason",
         "rainbowkit",
         "snowtrace",
         "toastify",

@@ -6,8 +6,14 @@ import Image from 'next/image'
 import arrowLeftSvg from '../../assets/arrow-left.svg'
 import WithDrawAlert from '../../components/withdrawalert/WithdrawAlert'
 import DepositModal from '../../components/depositModal/DepositModal'
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import Succour_abi from "../../abi/abi.json"
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 const ProfilePage = () => {
+  const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
+  const { address } = useAccount();
+
 
      const [showModal, setShowModal] = useState(false);
      const [showDepositModal, setShowDepositModal] = useState(false);
@@ -18,6 +24,35 @@ const ProfilePage = () => {
 
      const openDepositModal = () => {
         setShowDepositModal(prev => !prev);
+     }
+
+
+     const {
+          data: requestToWithdrawData,
+          write: requestToWithdrawWrite,
+          isLoading: requestLoading
+     } = useContractWrite({
+          mode: 'recklesslyUnprepared',
+          addressOrName: SuccourAddress,
+          contractInterface: Succour_abi,
+          functionName: 'requestToWithdrawDAO'
+     })
+
+     const {isLoading: rtwLoader} = useWaitForTransaction({
+          hash: requestToWithdrawData?.hash,
+          onSuccess(){
+               // add toastify; input: You've Requested for withdrawal
+          },
+          onError(data){
+               console.log(data)
+               // add toastify; input: Unable to request for withdrawal
+          }
+     })
+
+     const handleSubmit = (e:any) => {
+          e.preventDefault();
+
+          requestToWithdrawWrite();
      }
 
   return (
@@ -67,8 +102,21 @@ const ProfilePage = () => {
                </div>
 
                   <div className={styles.profile_btn}>
-                         <button className={styles.withdraw} onMouseMove={openModal}>Withdraw</button>
-                         <button className={styles.request}>Request to Withdraw</button>
+                    {
+                         address ?
+                         <>
+                              <button className={styles.withdraw} onMouseMove={openModal}>Withdraw</button>
+                         <button
+                         className={styles.request}
+                         disabled={requestLoading || rtwLoader}
+                         onClick={handleSubmit}
+                         >
+                              {(requestLoading || rtwLoader) ? "Loading..." : "Request to Withdraw"}
+                         </button>
+                         </>:
+                         <ConnectButton />
+                    }
+                         
                     </div>
            </div>
           </div>
