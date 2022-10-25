@@ -1,8 +1,11 @@
 {
     "cSpell.ignoreWords": [
+        "Daddress",
+        "approvec",
         "celo",
         "rainbowkit",
         "snowtrace",
+        "toastify",
         "wagmi"
     ]
 }

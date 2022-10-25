@@ -4,8 +4,11 @@ import styles from './joinmodal.module.scss'
 import walletIcon from '../../assets/wallet-1.svg'
 import Image from 'next/image'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useAccount } from 'wagmi'
-import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import ERC20_ABI from "../../abi/ERC20.json"
+import Succour_abi from "../../abi/abi.json"
+import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
 
 interface IProps {
       showJoinModal: any;
@@ -13,7 +16,9 @@ interface IProps {
 }
 
 const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
-  const ContractAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
+  const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
+  const cUSDaddress = "0x07b8b15Afd654e9334A3D63396B5f9092bfb0D9E";
+
 
   const {address} = useAccount();
 
@@ -24,7 +29,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
   const animation = useSpring({
     config: {
       duration: 300
-    }, 
+    },
     opacity: showJoinModal ? 1 : 0,
     transform: showJoinModal ? `translateY(0%)` : `translateY(100%)`
   })
@@ -47,40 +52,73 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
   }, [keyPress])
 
   // User's input form
+  // Approves ERC20 token to deposit
   const {
-    config,
-    error: prepareError,
-    isError: isPrepareError,
-  } = usePrepareContractWrite({
-    // @ts-ignore
-    address: '0x12F57C67FDd16109B549F0B40579694fE12bf9Fd',
-    abi: [
-      {
-        name: 'joinDAO',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-          {
-            "internalType": "string",
-            "name": "_name",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        outputs: [],
-      }
-    ],
-    functionName: 'joinDAO',
+    data: approveData,
+    write: approvecUSDToken,
+    isLoading: approveLoading,
+  } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    addressOrName: cUSDaddress,
+    contractInterface: ERC20_ABI.abi,
+    functionName: 'approve',
+    args: [
+      SuccourAddress,
+      ethers.utils.parseEther(amount? amount.toString(): "0"),
+    ]
   })
-  const { data, error, isError, write} = useContractWrite(config)
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const {isLoading: approveWaitLoader} = useWaitForTransaction({
+    hash: approveData?.hash,
+    onSuccess(){
+      joinDAOWrite()
+    },
+    onError(data){
+      console.log(data)
+    }
+
   })
+
+  // call joinDAO on approve
+  const {
+    data: joinDaoData,
+    write: joinDAOWrite,
+    isLoading: joinDaoLoading,
+  } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    addressOrName: SuccourAddress,
+    contractInterface: Succour_abi,
+    functionName: 'approve',
+    args:[
+      name,
+      ethers.utils.parseEther(amount? amount.toString(): "0")
+    ]
+  })
+
+  const router = useRouter();
+
+  const { isLoading: joinDaoWaitData } = useWaitForTransaction({
+    hash: joinDaoData?.hash,
+    onSuccess(){
+      // add toastify; input: Transaction sent successfully
+      router.push("/profilepage/ProfilePage")
+    },
+    onError(data){
+      console.log(data)
+      // add toastify; input: Error encountered in joining SuccourDAO
+    }
+  })
+
+
+
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+
+
+    approvecUSDToken();
+  }
+
+
 
 
   return (
@@ -89,7 +127,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
       <div className={styles.join} ref={modalRef} onClick={closeModal}>
             {/* animating the whole container properties*/}
             <animated.div style={animation}>
-            <div className={styles.wrapper}  showJoinModal={showJoinModal}>
+                <div className={styles.wrapper}  showJoinModal={showJoinModal}>
                 <div className={styles.closeButton} onClick={() => setShowJoinModal((prev : any) => !prev)}></div>
                 <div className={styles.container}>
                       <div className={styles.join_content}>
@@ -101,7 +139,9 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                         className={styles.input}
                         type="text"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}/>
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        />
                       </div>
 
                     <div className={styles.text}>
@@ -114,6 +154,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                           type="number"
                           value={amount}
                           onChange={(e) => setAmount(e.target.value)}
+                          required
                           />
                         <select name="choice">
                           <option value="cUSD" selected>cUSD</option>
@@ -125,7 +166,12 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                     </div>
                     {
                       address ?
-                      <button>Submit</button> :
+                      <button
+                      disabled={approveLoading || approveWaitLoader || joinDaoLoading || joinDaoWaitData}
+                      onClick={handleSubmit}
+                      >
+                        {(approveLoading || approveWaitLoader || joinDaoLoading || joinDaoWaitData) ? "Loading..." : "Join DAO"}
+                      </button> :
                       <ConnectButton />
                     }
 
