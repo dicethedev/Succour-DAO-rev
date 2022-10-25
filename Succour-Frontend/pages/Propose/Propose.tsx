@@ -32,7 +32,7 @@ const Propose = () => {
           args: [
                title,
                projectDescription,
-               ethers.utils.parseEther(amountProposed? AmountProposed.toString(): "0")
+               ethers.utils.parseEther(amountProposed? amountProposed.toString(): "0")
           ]
      })
 
@@ -72,7 +72,7 @@ const Propose = () => {
                <div className={styles.top_container}>
                     <div className={styles.propose_content}>
                     <h1 className={styles.title}>Propose a project</h1>
-                    <form className={styles.propose_form} onSubmit={handleSubmit}>
+                    <form className={styles.propose_form} >
                          {/* <label>Member ID</label>
                          <input id="input" name="input" type="text" /> */}
 
@@ -108,7 +108,7 @@ const Propose = () => {
                               disabled={proposeIsLoading || proposeLoading}
                               onClick={handleSubmit}
                               >
-                                   {(proposeIsLoading || proposeLoading) ? "Loading": "Propose Project"}
+                                   {(proposeIsLoading || proposeLoading) ? "Loading...": "Propose Project"}
                               </button> :
                               <ConnectButton />
                          }
