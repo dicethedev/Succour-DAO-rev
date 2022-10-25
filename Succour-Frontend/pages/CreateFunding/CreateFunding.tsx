@@ -1,4 +1,5 @@
 // import {useRef} from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from './createfunding.module.scss'
@@ -6,9 +7,57 @@ import Navbar from '../../layouts/navbar/Navbar'
 import Footer from '../../layouts/footer/Footer'
 import documentCloudSvg from '../../assets/document-cloud-2.svg'
 import arrowLeftSvg from '../../assets/arrow-left.svg'
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import Succour_abi from "../../abi/abi.json"
+import { ethers } from 'ethers'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+
 
 const CreateFunding = () => {
-     
+     const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
+
+     const [fundname, setFundname] = useState("");
+     const [fundreason, setFundreason] = useState("");
+     const [amountneeded, setAmountneeded] = useState("")
+
+
+     const { address } = useAccount();
+
+
+     const {
+          data: createFundData,
+          write: createFundWrite,
+          isLoading: fundingIsLoading,
+     } = useContractWrite({
+          mode: 'recklesslyUnprepared',
+          addressOrName: SuccourAddress,
+          contractInterface: Succour_abi,
+          functionName: 'createGofund',
+          args: [
+               fundname,
+               fundreason,
+               ethers.utils.parseEther(amountneeded ? amountneeded.toString(): "0")
+          ]
+     })
+
+     const {
+          isLoading: fundingLoader
+     } = useWaitForTransaction({
+          hash: createFundData?.hash,
+          onSuccess(){
+               // add toastify; input: Successfully create fund
+          },
+          onError(data){
+               console.log(data)
+               // add toastify; input: Error encountered while creating Fund
+          }
+     })
+
+     const handleSubmit = (e:any) => {
+          e.preventDefault();
+
+          createFundWrite();
+     }
      return (
           <>
           <Navbar />
@@ -33,17 +82,17 @@ const CreateFunding = () => {
                      <input id="input" name="input" type="text" /> */}
 
                       <label>Project title</label>
-                     <input id="input" name="input" type="text" />
+                     <input id="input" name="input" type="text" value={fundname} onChange={(e)=> e.target.value} />
 
                      <label>Project links</label>
-                     <input id="input" name="input" type="text" />
+                     <input id="input" name="input" type="text" onChange={(e)=> e.target.value}/>
 
                       <label>Amount proposed</label>
-                      <input id="input" name="input" type="text" />
+                      <input id="input" name="input" type="text" value={amountneeded} onChange={(e)=> e.target.value}/>
 
                       <label>Project description</label>
-                     <textarea cols={30} rows={5} ></textarea>
-                     <label>Project media</label>
+                     <textarea cols={30} rows={5} value={fundreason} onChange={(e)=> e.target.value}></textarea>
+                     {/* <label>Project media</label>
                      <div className={styles.upload_btn_wrapper}>
                          <div className={styles.cloudsvg}>
                               <div className={styles.icon}>
@@ -56,8 +105,19 @@ const CreateFunding = () => {
                          />
                               <p>Click here to upload an image</p>
                          </div>
-                     </div>
-                     <button className={styles.form_btn}>Propose Project</button>
+                     </div> */}
+                     {
+                         address ?
+                         <button
+                         className={styles.form_btn}
+                         disabled={fundingIsLoading || fundingLoader}
+                         onClick={handleSubmit}
+                         >
+                              {(fundingIsLoading || fundingLoader) ? "Loading..." : "Create Funding"}
+                         </button> :
+                         <ConnectButton />
+                     }
+
                    </form>
                </div>
                </div>
