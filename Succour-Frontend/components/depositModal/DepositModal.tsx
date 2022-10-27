@@ -16,6 +16,7 @@ interface IProps {
 }
 
 const DepositModal = ({ showDepositModal, setShowDepositModal } : IProps) => {
+
   const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
   const [depositamount, setDepositamount] = useState("");
 
@@ -101,10 +102,7 @@ const DepositModal = ({ showDepositModal, setShowDepositModal } : IProps) => {
                               </div>
                               <input type="number" value={depositamount} onChange={(e)=> setDepositamount(e.target.value)} />
                                <select name="choice">
-                              <option value="BTC">BTC</option>
-                              <option value="ETH">ETH</option>
-                              <option value="USDC">USDC</option>
-                              <option value="cUSD" selected>cUSD</option>
+                              <option value="cUSD">cUSD</option>
                             </select>
                          </div>
                          {

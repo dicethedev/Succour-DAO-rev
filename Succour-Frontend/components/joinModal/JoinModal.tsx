@@ -1,10 +1,13 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styles from './joinmodal.module.scss'
+import userIcon from '../../assets/carbon_user-avatar.svg'
 import walletIcon from '../../assets/wallet-1.svg'
 import Image from 'next/image'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import ERC20_ABI from "../../abi/ERC20.json"
 import Succour_abi from "../../abi/abi.json"
 import { ethers } from 'ethers'
@@ -16,6 +19,7 @@ interface IProps {
 }
 
 const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
+
   const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
   const cUSDaddress = "0x07b8b15Afd654e9334A3D63396B5f9092bfb0D9E";
 
@@ -101,28 +105,31 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
     hash: joinDaoData?.hash,
     onSuccess(){
       // add toastify; input: Transaction sent successfully
+      toast.success('Transaction sent successfully!', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 8000
+     })
       router.push("/profilepage/ProfilePage")
     },
     onError(data){
       console.log(data)
       // add toastify; input: Error encountered in joining SuccourDAO
+      toast.error('Error encountered in joining SuccourDAO!', 
+      { position: toast.POSITION.TOP_CENTER })
     }
   })
 
-
-
   const handleSubmit = (e:any) => {
     e.preventDefault();
-
 
     approvecUSDToken();
   }
 
 
-
-
   return (
       <>
+      <ToastContainer />
+
       {showJoinModal ? (
       <div className={styles.join} ref={modalRef} onClick={closeModal}>
             {/* animating the whole container properties*/}
@@ -133,7 +140,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                       <div className={styles.join_content}>
                       <h1 className={styles.title}>Join Succor DAO</h1>
 
-                      <div className={styles.join_input1}>
+                      {/* <div className={styles.join_input1}>
                         <label>Name</label>
                         <input
                         className={styles.input}
@@ -142,7 +149,25 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                         onChange={(e) => setName(e.target.value)}
                         required
                         />
-                      </div>
+                      </div> */}
+
+                      
+                    <div className={styles.text}>
+                      <label>Name</label>
+                        <div className={styles.join_input}>
+                          <div className={styles.wallet_icon}>
+                            <Image src={userIcon} alt="" />
+                          </div>
+                          <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                          />
+                    </div>
+
+
+                    </div>
 
                     <div className={styles.text}>
                       <label>Amount to deposit</label>
@@ -166,13 +191,106 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                     </div>
                     {
                       address ?
-                      <button
+                      <button className={styles.join_btn}
                       disabled={approveLoading || approveWaitLoader || joinDaoLoading || joinDaoWaitData}
                       onClick={handleSubmit}
                       >
                         {(approveLoading || approveWaitLoader || joinDaoLoading || joinDaoWaitData) ? "Loading..." : "Join DAO"}
                       </button> :
-                      <ConnectButton />
+                    //connectButton custom
+            <div className={styles.connection}>
+              <ConnectButton.Custom>
+      {({
+        account,
+        chain,
+        openAccountModal,
+        openChainModal,
+        openConnectModal,
+        authenticationStatus,
+        mounted,
+      }) => {
+        // Note: If your app doesn't use authentication, you
+        // can remove all 'authenticationStatus' checks
+        const ready = mounted && authenticationStatus !== 'loading';
+        const connected =
+          ready &&
+          account &&
+          chain &&
+          (!authenticationStatus ||
+            authenticationStatus === 'authenticated');
+
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              'style': {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <button onClick={openConnectModal} type="button" className={styles.connect_btn}>
+                    Connect Wallet
+                  </button>
+                );
+              }
+
+              if (chain.unsupported) {
+                return (
+                  <button onClick={openChainModal} type="button" className={styles.wrong_btn}>
+                    Wrong network
+                  </button>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button
+                    onClick={openChainModal}
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    type="button"
+                  >
+                    {chain.hasIcon && (
+                      <div
+                        style={{
+                          background: chain.iconBackground,
+                          width: 12,
+                          height: 12,
+                          borderRadius: 999,
+                          overflow: 'hidden',
+                          marginRight: 4,
+                        }}
+                      >
+                        {chain.iconUrl && (
+                          <img
+                            alt={chain.name ?? 'Chain icon'}
+                            src={chain.iconUrl}
+                            style={{ width: 12, height: 12 }}
+                          />
+                        )}
+                      </div>
+                    )}
+                    {chain.name}
+                  </button>
+
+                  <button onClick={openAccountModal} type="button">
+                    {account.displayName}
+                    {account.displayBalance
+                      ? ` (${account.displayBalance})`
+                      : ''}
+                  </button>
+                </div>
+              );
+            })()}
+          </div>
+        );
+      }}
+              </ConnectButton.Custom>
+            </div>
                     }
 
 

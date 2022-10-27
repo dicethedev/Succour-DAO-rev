@@ -14,6 +14,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 
 const CreateFunding = () => {
+
      const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
 
      const [fundname, setFundname] = useState("");
@@ -81,16 +82,16 @@ const CreateFunding = () => {
                      {/* <label>Member ID</label>
                      <input id="input" name="input" type="text" /> */}
 
-                      <label>Project title</label>
+                      <label>Funding title</label>
                      <input id="input" name="input" type="text" value={fundname} onChange={(e)=> e.target.value} />
 
-                     <label>Project links</label>
-                     <input id="input" name="input" type="text" onChange={(e)=> e.target.value}/>
+                     {/* <label>Project links</label>
+                     <input id="input" name="input" type="text" onChange={(e)=> e.target.value}/> */}
 
-                      <label>Amount proposed</label>
+                      <label>Amount to be funded</label>
                       <input id="input" name="input" type="text" value={amountneeded} onChange={(e)=> e.target.value}/>
 
-                      <label>Project description</label>
+                      <label>Funding description</label>
                      <textarea cols={30} rows={5} value={fundreason} onChange={(e)=> e.target.value}></textarea>
                      {/* <label>Project media</label>
                      <div className={styles.upload_btn_wrapper}>
@@ -115,7 +116,99 @@ const CreateFunding = () => {
                          >
                               {(fundingIsLoading || fundingLoader) ? "Loading..." : "Create Funding"}
                          </button> :
-                         <ConnectButton />
+        <div className={styles.creatfunding_btn}>
+              <ConnectButton.Custom>
+      {({
+        account,
+        chain,
+        openAccountModal,
+        openChainModal,
+        openConnectModal,
+        authenticationStatus,
+        mounted,
+      }) => {
+        // Note: If your app doesn't use authentication, you
+        // can remove all 'authenticationStatus' checks
+        const ready = mounted && authenticationStatus !== 'loading';
+        const connected =
+          ready &&
+          account &&
+          chain &&
+          (!authenticationStatus ||
+            authenticationStatus === 'authenticated');
+
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              'style': {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <button onClick={openConnectModal} type="button" className={styles.connect_btn}>
+                    Connect Wallet
+                  </button>
+                );
+              }
+
+              if (chain.unsupported) {
+                return (
+                  <button onClick={openChainModal} type="button" className={styles.wrong_btn}>
+                    Wrong network
+                  </button>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button
+                    onClick={openChainModal}
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    type="button"
+                  >
+                    {chain.hasIcon && (
+                      <div
+                        style={{
+                          background: chain.iconBackground,
+                          width: 12,
+                          height: 12,
+                          borderRadius: 999,
+                          overflow: 'hidden',
+                          marginRight: 4,
+                        }}
+                      >
+                        {chain.iconUrl && (
+                          <img
+                            alt={chain.name ?? 'Chain icon'}
+                            src={chain.iconUrl}
+                            style={{ width: 12, height: 12 }}
+                          />
+                        )}
+                      </div>
+                    )}
+                    {chain.name}
+                  </button>
+
+                  <button onClick={openAccountModal} type="button">
+                    {account.displayName}
+                    {account.displayBalance
+                      ? ` (${account.displayBalance})`
+                      : ''}
+                  </button>
+                </div>
+              );
+            })()}
+          </div>
+        );
+      }}
+              </ConnectButton.Custom>
+                              </div>
                      }
 
                    </form>

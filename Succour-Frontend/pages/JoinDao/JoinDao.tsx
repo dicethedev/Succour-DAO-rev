@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styles from './joindao.module.scss'
 import JoinModal from '../../components/joinModal/JoinModal'
+import { useRouter } from 'next/router'
+
 
 interface IProps {
      showModal: any;
@@ -10,18 +12,27 @@ interface IProps {
 
 const JoinDao = ({ showModal, setShowModal } : IProps) => {
 
-         
-
     // @dev - this is for JoinModal function
 
    const [showJoinModal, setShowJoinModal] = useState(false);
+   const [checked, setChecked] = useState(false);
+    
+   const router = useRouter()
 
      const openJoinModal = () => {
        setShowJoinModal(prev => !prev);
      }
 
+     const handleChange = () => {
+      setChecked(!checked);
+    };
 
-       const modalRef = useRef<any | any>();
+     const handleClick = (e: any) => {
+      e.preventDefault()
+       router.push("/");
+    }
+
+      const modalRef = useRef<any | any>();
       
       const animation = useSpring({
         config: {
@@ -67,14 +78,14 @@ const JoinDao = ({ showModal, setShowModal } : IProps) => {
                            <p className={styles.join_question}>Are you willing to join a non-profit organisation? <span>*</span></p>
                          
                               <div className={styles.checkbox_container}>
-                                  <input type="checkbox" id="check" name="checkbox" /> 
+                                  <input type="checkbox" checked={checked} onChange={handleChange} /> 
                                    <span className={styles.checkmark}></span>
                                   <label htmlFor="check">Yes</label>
                               </div>
 
                               
                               <div className={styles.checkbox_container}>
-                                  <input type="checkbox" id="check" name="checkbox" /> 
+                                  <input type="checkbox" id="check" name="checkbox" onClick={handleClick} /> 
                                   <span className={styles.checkmark}></span>
                                   <label htmlFor="check">No</label>
                               </div>
