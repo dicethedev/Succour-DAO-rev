@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../components/navbar/Navbar'
+import Navbar from '../components/navbar/Navbar'
 import AboutUs from '../../components/header/AboutUs'
 import Projects from '../../components/project/Projects'
 import CampaignPage from '../../components/campaign/Campaign'

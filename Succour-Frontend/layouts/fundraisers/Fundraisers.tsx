@@ -2,22 +2,22 @@ import {useState} from 'react'
 import styles from './fundraiser.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { data } from './data'
+import { data } from '../../layouts/data'
 import arrowRightIcon from '../../assets/arrow-right-1.svg'
 
 const Projects = () => {
 
-    //  const [visible, setVisible] = useState(6);
+     const [visible, setVisible] = useState(6);
 
-    //  const handleMoreProjectItem = () => {
-    //    setVisible((prevValue) => prevValue + 6);
-    //  }
+     const handleMoreProjectItem = () => {
+       setVisible((prevValue) => prevValue + 6);
+     }
 
      return (
-           <section className={styles.fundraiser}>
+           <section className={styles.fundraiser} id="fundraiser">
                <div className={styles.wrapper}>
                     <div className={styles.container}>
-                    <div className={styles.fundraiser_container}>
+                    <div className={styles.fundraiser_container}>jn
                              <div className={styles.fundraiser_header}>
                               <span className={styles.title}>Some fundraisers</span>
                               <div className={styles.totheright}>
@@ -32,11 +32,12 @@ const Projects = () => {
                               </div>
                             </div>
                        
-                       <Link href="/FundraiserProject/FundraiserProject">
+                       
                        <div className={styles.fundraiser_grid}>
                                {
-                    data?.map(({ id, problemTitle, desc, number, donation }) => {
+                    data?.slice(0, visible)?.map(({ id, problemTitle, desc, number, donation }) => {
                        return (
+                        <Link href={`/FundraiserProject/${id}`}>
                          <div className={styles.fundraiser_item} key={id}>
                             <div className={styles.fundraiser_img}>
                               <Image src="" className={styles.img} />
@@ -57,11 +58,18 @@ const Projects = () => {
                               </div>
                            </div> 
                          </div>
+                           </Link>
                               )
                            })
                          }
                      </div>
-                     </Link>
+                     <div className={styles.viewmore_center}>
+                       <button onClick={handleMoreProjectItem}
+                        className={styles.viewmore_btn}
+                        >
+                        View more
+                       </button>
+                      </div>
                     </div>
                     </div>
                </div>

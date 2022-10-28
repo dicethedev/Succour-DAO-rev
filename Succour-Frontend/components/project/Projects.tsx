@@ -1,13 +1,24 @@
-import React from 'react'
+import {useState} from 'react'
 import Link from 'next/link'
 import styles from './project.module.scss'
 import Image from 'next/image'
-import { data } from './data'
+import { data } from '../../pages/data'
+
 
 const Projects = () => {
+
+
+     const [visible, setVisible] = useState(3);
+
+     const handleMoreProjectItem = () => {
+       setVisible((prevValue) => prevValue + 3);
+     }
+
      return (
           <section className={styles.project}>
                <div className={styles.wrapper}>
+                <div className={styles.netvector_right}></div>
+                 <div className={styles.circle_right}></div>
                     <div className={styles.container}>
                     <div className={styles.project_container}>
                              <div className={styles.project_header}>
@@ -18,11 +29,12 @@ const Projects = () => {
                             </div>
                 
                        
-                    <Link href="/ProposePage/ProposePage">
+                   
                      <div className={styles.project_grid}>
                                {
-                    data.map(({ id, time, problemTitle, desc, lowest, etherAmount, voteButton }) => {
+                    data?.slice(0, visible)?.map(({ id, time, problemTitle, desc, lowest, etherAmount, voteButton }) => {
                        return (
+                         <Link href={`/ProposePage/${id}`}>
                          <div className={styles.project_item} key={id}>
                             <div className={styles.project_img}>
                               <Image src="" className={styles.img} />
@@ -44,12 +56,20 @@ const Projects = () => {
                               </div>
                            </div> 
                          </div>
+                           </Link>
                               )
                            })
                          }
                      </div>
-                      </Link>
-
+                    
+                       <div className={styles.viewmore_center}>
+                       <button onClick={handleMoreProjectItem}
+                        className={styles.viewmore_btn}
+                        >
+                        View more
+                       </button>
+                      </div>
+                  
                     </div>
                     </div>
                </div>
