@@ -7,7 +7,7 @@ import arrowLeftSvg from '../../assets/arrow-left.svg'
 import WithDrawAlert from '../../components/withdrawalert/WithdrawAlert'
 import DepositModal from '../../components/depositModal/DepositModal'
 import { ToastContainer, toast } from 'react-toastify'
-import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useContractRead, useContractWrite, useWaitForTransaction } from 'wagmi'
 import Succour_abi from "../../abi/abi.json"
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
@@ -17,114 +17,136 @@ const ProfilePage = () => {
   const { address } = useAccount();
 
 
-     const [showModal, setShowModal] = useState(false);
-     const [showDepositModal, setShowDepositModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [showDepositModal, setShowDepositModal] = useState(false);
 
-     const openModal = () => {
-          setShowModal(prev => !prev);
-     }
+    const openModal = () => {
+        setShowModal(prev => !prev);
+    }
 
-     const openDepositModal = () => {
-        setShowDepositModal(prev => !prev);
-     }
+    const openDepositModal = () => {
+      setShowDepositModal(prev => !prev);
+    }
 
 
-     const {
-          data: requestToWithdrawData,
-          write: requestToWithdrawWrite,
-          isLoading: requestLoading
-     } = useContractWrite({
-          mode: 'recklesslyUnprepared',
-          addressOrName: SuccourAddress,
-          contractInterface: Succour_abi,
-          functionName: 'requestToWithdrawDAO'
-     })
+    // read function for users details
 
-     const {isLoading: rtwLoader} = useWaitForTransaction({
-          hash: requestToWithdrawData?.hash,
-          onSuccess(){
-               // add toastify; input: You've Requested for withdrawal
-                toast.success('You have Requested for withdrawal', {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 8000
-                })
-          },
-          onError(data){
-               console.log(data)
-               // add toastify; input: Unable to request for withdrawal
-                 toast.error('Unable to request for withdrawal', 
-               { position: toast.POSITION.TOP_CENTER })
-          }
-     })
+    const {data: userProfile} = useContractRead({
+      addressOrName: SuccourAddress,
+      contractInterface: Succour_abi,
+      functionName: 'members',
+      args: [
+        address
+      ]
+    })
 
-     const handleSubmit = (e:any) => {
-          e.preventDefault();
+    console.log(userProfile, "userProfile")
 
-          openModal();
-          requestToWithdrawWrite();
-     }
 
-  return (
-     <>
-      <Navbar />
-      {/* Deposit Modal is here */}
-      <DepositModal showDepositModal={showDepositModal} setShowDepositModal={setShowDepositModal} />
-       {/* Width Alert Info Modal */}
-      <WithDrawAlert showModal={showModal} setShowModal={setShowModal} />
-      <div className={styles.profile}>
-       <div className={styles.wrapper}>
-         <div className={styles.left}>
-          <div className={styles.back_arrow}>
-              <Link href="/Projects/Projects">
-              <div className={styles.arrow}>
-                  <Image src={arrowLeftSvg} alt="" />
-                </div>
-               </Link>
-               </div>
-        </div>
-        <div className={styles.container}>
-          <div className={styles.top_container}>
-           <div className={styles.profile_content}>
-               <div className={styles.profile_info}>
-                    <div className={styles.name_address}>
-                      <h1 className={styles.title}>John Doe</h1>
-                      <p className={styles.id}>Member ID: <span>001231</span></p>
-                    </div>
-                    
-                    <div className={styles.address_info}>
-                         <h2 className={styles.member_address}>Member Address</h2>
-                       <p className={styles.address}>dnjhndiuropwo096069</p>
-                    </div>
-               </div>
+    const {
+        data: requestToWithdrawData,
+        write: requestToWithdrawWrite,
+        isLoading: requestLoading
+    } = useContractWrite({
+        mode: 'recklesslyUnprepared',
+        addressOrName: SuccourAddress,
+        contractInterface: Succour_abi,
+        functionName: 'requestToWithdrawDAO'
+    })
 
-               <div className={styles.profile_vote}>
-                    <div className={styles.vote_count}>
-                      <h2 className={styles.vote_power}>Voting Power: <span>0.785</span></h2>
-                     <h2 className={styles.vote_percentage}>Percentage of DAO: <span>0.15</span></h2>
-                    </div>
+    const {isLoading: rtwLoader} = useWaitForTransaction({
+        hash: requestToWithdrawData?.hash,
+        onSuccess(){
+              // add toastify; input: You've Requested for withdrawal
+              toast.success('You have Requested for withdrawal', {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 8000
+              })
+        },
+        onError(data){
+              console.log(data)
+              // add toastify; input: Unable to request for withdrawal
+                toast.error('Unable to request for withdrawal', 
+              { position: toast.POSITION.TOP_CENTER })
+        }
+    })
 
-                    <div className={styles.balance_count}>
-                         <h1 className={styles.balance_title}>Balance</h1>
-                         <h2 className={styles.balance}>4000 USDC</h2>
-                         <button className={styles.deposit_btn} onClick={openDepositModal}>Deposit funds</button>
-                    </div>
-               </div>
+    const handleSubmit = (e:any) => {
+        openModal();
+    }
 
-                  <div className={styles.profile_btn}>
-                    {
-                         address ?
-                         <>
-                              <button className={styles.withdraw}>Withdraw</button>
-                         <button
-                         // onMouseMove={openModal}
-                         className={styles.request}
-                         disabled={requestLoading || rtwLoader}
-                         onClick={handleSubmit}
-                         >
-                              {(requestLoading || rtwLoader) ? "Loading..." : "Request to Withdraw"}
-                         </button>
-                         </>:
-                         <div>
+    const hexToDecimal = (hex:any) => parseInt(hex, 16);
+
+    const headerStyle = {
+      color: "white"
+    }
+
+return (
+    <>
+    <Navbar />
+    {/* Deposit Modal is here */}
+    <DepositModal showDepositModal={showDepositModal} setShowDepositModal={setShowDepositModal} />
+      {/* Width Alert Info Modal */}
+    <WithDrawAlert showModal={showModal} setShowModal={setShowModal} />
+    <div className={styles.profile}>
+      <div className={styles.wrapper}>
+        <div className={styles.left}>
+        <div className={styles.back_arrow}>
+            <Link href="/Projects/Projects">
+            <div className={styles.arrow}>
+                <Image src={arrowLeftSvg} alt="" />
+              </div>
+              </Link>
+              </div>
+      </div>
+      <div className={styles.container}>
+        <div className={styles.top_container}>
+          {
+            userProfile?
+              hexToDecimal(userProfile[1]._hex) == 0 ?
+              <h1 style={headerStyle}>You are not a member of the DAO</h1>:
+              <div className={styles.profile_content}>
+              <div className={styles.profile_info}>
+                  <div className={styles.name_address}>
+                    <h1 className={styles.title}>{userProfile? userProfile[0]: ""}</h1>
+                    <p className={styles.id}>Member ID: <span>{userProfile? ("00000" + hexToDecimal(userProfile[1]._hex)).slice(-6) : ""}</span></p>
+                  </div>
+
+                  <div className={styles.address_info}>
+                        <h2 className={styles.member_address}>DAO Member Address</h2>
+                      <p className={styles.address}>{userProfile? <>{address?.slice(0,12)}.........</> : ""}</p>
+                  </div>
+              </div>
+
+              <div className={styles.profile_vote}>
+                  <div className={styles.vote_count}>
+                    <h2 className={styles.vote_power}>Voting Power: <span>{userProfile? hexToDecimal(userProfile[4]._hex): ""}</span></h2>
+                  </div>
+
+                  <div className={styles.balance_count}>
+                        <h1 className={styles.balance_title}>Balance</h1>
+                        <h2 className={styles.balance}>{userProfile?hexToDecimal(userProfile[3]._hex): ""}</h2>
+                        <button className={styles.deposit_btn} onClick={openDepositModal}>Deposit funds</button>
+                  </div>
+              </div>
+
+                <div className={styles.profile_btn}>
+                  {
+                        address ?
+                        <>
+                        {userProfile?
+                          Date.now()>= hexToDecimal(userProfile[5]._hex)?
+                            <button className={styles.withdraw}>Withdraw</button>:
+                            <button className={styles.withdraw}>Withdrawal in process </button>: ""
+                        }
+                        <button
+                        className={styles.request}
+                        onClick={handleSubmit}
+                        >
+                            Request to Withdraw
+                        </button>
+                        </>:
+                        <div>
               <ConnectButton.Custom>
       {({
         account,
@@ -192,7 +214,7 @@ const ProfilePage = () => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}
@@ -216,17 +238,19 @@ const ProfilePage = () => {
         );
       }}
               </ConnectButton.Custom>
-                         </div>
+                        </div>
                     }
-                         
+
                     </div>
-           </div>
-          </div>
+          </div>:
+          <h1 style={headerStyle}>You are not a member of the DAO</h1>
+          }
         </div>
-       </div>
       </div>
-     </>
-  
+      </div>
+    </div>
+    </>
+
   )
 }
 

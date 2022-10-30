@@ -151,7 +151,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                         />
                       </div> */}
 
-                      
+
                     <div className={styles.text}>
                       <label>Name</label>
                         <div className={styles.join_input}>
@@ -266,7 +266,7 @@ const JoinModal = ({ showJoinModal, setShowJoinModal } : IProps) => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}
