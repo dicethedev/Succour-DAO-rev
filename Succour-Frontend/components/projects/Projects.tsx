@@ -71,7 +71,7 @@ const Projects = () => {
                                     </div>
                                     <div className={styles.project_text}>
                                       <div className={styles.project_time}>
-                                        {("000000" + hexToDecimal(item[0])).slice(-7)}
+                                        {("00000" + hexToDecimal(item[0])).slice(-6)}
                                       </div>
                                       <div className={styles.project_titled}>{item[3]}</div>
                                       <div className={styles.project_desc}>{`${item[4].slice(0, 100)}`}</div>

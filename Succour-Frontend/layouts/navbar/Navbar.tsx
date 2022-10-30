@@ -22,6 +22,7 @@ import { NavbarContainer,
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {MdClose} from 'react-icons/md'
 import JoinDao from '../../pages/JoinDao/JoinDao'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 const Navbar = () => {
   const [click, setClick] = useState<any | any>(false);
@@ -51,6 +52,7 @@ const Navbar = () => {
                </NavbarLink> */}
                
                <Link href="/Crowdfunding"><NavbarButton>Crowdfunding</NavbarButton></Link>
+               <ConnectButton />
                <NavbarUser>
                 <TiUserOutline color="white" fontSize="1.5rem" />
                </NavbarUser>

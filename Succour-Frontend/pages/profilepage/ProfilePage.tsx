@@ -125,7 +125,7 @@ return (
 
                   <div className={styles.balance_count}>
                         <h1 className={styles.balance_title}>Balance</h1>
-                        <h2 className={styles.balance}>{userProfile?hexToDecimal(userProfile[3]._hex): ""}</h2>
+                        <h2 className={styles.balance}>{userProfile?(hexToDecimal(userProfile[3]._hex)/1e18).toLocaleString(): ""}</h2>
                         <button className={styles.deposit_btn} onClick={openDepositModal}>Deposit funds</button>
                   </div>
               </div>
@@ -137,7 +137,7 @@ return (
                         {userProfile?
                           Date.now()>= hexToDecimal(userProfile[5]._hex)?
                             <button className={styles.withdraw}>Withdraw</button>:
-                            <button className={styles.withdraw}>Withdrawal in process </button>: ""
+                            <button className={styles.withdraw}>You can not withdraw now </button>: ""
                         }
                         <button
                         className={styles.request}

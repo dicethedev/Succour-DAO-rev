@@ -57,14 +57,14 @@ console.log(DAOProposals, "view the contract proposals")
                                     </div>
                                     <div className={styles.project_text}>
                                       <div className={styles.project_time}>
-                                        {("000000" + hexToDecimal(item[0])).slice(-7)}
+                                        {("0000" + hexToDecimal(item[0])).slice(-7)}
                                       </div>
                                       <div className={styles.project_titled}>{item[3]}</div>
                                       <div className={styles.project_desc}>{`${item[4].slice(0, 100)}`}</div>
                                       <div className={styles.project_voteTiming}>
                                         <div className={styles.left_item}>
-                                          <h2 className={styles.lowest}>Price</h2>
-                                          <h1 className={styles.ether}>{hexToDecimal(item[1]).toExponential(2)}</h1>
+                                          <h2 className={styles.lowest}>Price in cUSD</h2>
+                                          <h1 className={styles.ether}>{((hexToDecimal(item[1]._hex)/1e18).toLocaleString())}</h1>
                                         </div>
                                         <div className={styles.right_item}>
                                           <button className={styles.button}>Vote now</button>
