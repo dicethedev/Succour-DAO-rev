@@ -52,6 +52,35 @@ export const NavbarLink = styled.a`
      display: none;
   }
 `
+
+export const Connection = styled.div`
+  margin-left: -5px;
+  margin-right: 15px;
+`
+
+export const ConnectionButton = styled.button`
+ cursor: pointer;
+ border: none;
+ background: linear-gradient(92.59deg, #AF4AAF 6.24%, rgba(49, 7, 49, 0.8) 100%);
+ border-radius: 20px;
+ width: 120px;
+ height: 45px;
+ font-weight: 500;
+ font-size: 15px;
+ line-height: 165%;
+ color: #FFFEFE;
+ transition: all 100ms ease-out;
+`
+
+export const Button = styled.button`
+ background: #331F33;
+ border: 1px solid #804D80;
+ font-weight: 500;
+ font-size: 12px;
+ line-height: 165%;
+ color: #FFFEFE;
+`
+
 export const Logo = styled.div`
   cursor: pointer;
   margin: 10px;

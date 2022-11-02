@@ -49,11 +49,11 @@ const Home: NextPage = () => {
          </p>
 
         <div className={styles.banner_links}>
-          <Link href="/DAO/dao">
+          <Link href="/dao">
           <button className={styles.dao_btn}>DAO</button>
           </Link>
 
-            <Link href="/Crowdfunding/Crowdfunding">
+            <Link href="/Crowdfunding">
                <button className={styles.crowdfunding_btn}>Crowd funding</button>
             </Link> 
         </div>
