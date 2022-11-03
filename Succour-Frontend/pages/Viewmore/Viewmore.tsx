@@ -15,9 +15,7 @@ const Projects = () => {
     const handleMoreProjectItem = () => {
       setVisible((prevValue) => prevValue + 6);
     }
-
-
-
+    
     const {data: fundraiser } = useContractRead({
       addressOrName: SuccourAddress,
       contractInterface: Succour_abi,
