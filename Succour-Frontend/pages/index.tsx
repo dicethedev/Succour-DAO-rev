@@ -3,8 +3,8 @@ import Link from 'next/link'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
-import styleLeft from '../assets/left-style.svg'
-import styleRight from '../assets/right-style.svg'
+// import styleLeft from '../assets/left-style.svg'
+// import styleRight from '../assets/right-style.svg'
 import Logo from '../assets/Succour.svg'
 import Preloader from '../components/Preloader'
 import {motion} from 'framer-motion'
@@ -49,11 +49,11 @@ const Home: NextPage = () => {
          </p>
 
         <div className={styles.banner_links}>
-          <Link href="/DAO/dao">
+          <Link href="/dao">
           <button className={styles.dao_btn}>DAO</button>
           </Link>
 
-            <Link href="/Crowdfunding/Crowdfunding">
+            <Link href="/Crowdfunding">
                <button className={styles.crowdfunding_btn}>Crowd funding</button>
             </Link> 
         </div>
