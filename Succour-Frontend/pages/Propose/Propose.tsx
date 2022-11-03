@@ -79,9 +79,6 @@ const Propose = () => {
                          <label>Project title</label>
                          <input id="input" name="input" type="text" value={title} onChange={(e)=> setTitle(e.target.value)} />
 
-                         <label>Project links</label>
-                         <input id="input" name="input" type="text" />
-
                          <label>Amount proposed</label>
                          <input id="input" name="input" type="text" value={amountProposed} onChange={(e) => setAmountProposed(e.target.value)} />
 

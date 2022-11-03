@@ -17,10 +17,14 @@ import { NavbarContainer,
     NavbarLinkRightContainer,
     OpenLinksButton,
     NavbarLinkExtended,
+<<<<<<< HEAD
     NavbarButtonExtended,
     Connection,
     ConnectionButton,
     Button
+=======
+    NavbarButtonExtended
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
 } from "./Navbar.style";
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {MdClose} from 'react-icons/md'
@@ -53,6 +57,65 @@ const Navbar = () => {
     <>
     {/* Profile Modal pop up */}
     <Profile showProfileModal={showProfileModal} setShowProfileModal={setShowProfileModal} />
+<<<<<<< HEAD
+=======
+
+    <NavbarContainer click={click}>
+        {/* Modal component is here */}
+      <JoinDao showModal={showModal} setShowModal={setShowModal} />
+      <NavbarInnerContainer>
+          <LeftContainer>
+          <Logo> 
+            <Link href="/"><Image src={logo} alt="Succour Logo" /></Link>
+          </Logo>
+          </LeftContainer>
+
+          <RightContainer>
+          <NavbarLinkContainer>
+              <Link href="/dao"><NavbarLink>DAO</NavbarLink></Link>
+              <Link href="/Projects/Projects"><NavbarLink>Projects</NavbarLink></Link>
+              <NavbarLink 
+              onClick={openModal}
+              >
+                Join DAO
+              </NavbarLink>
+
+              <Link href="/Crowdfunding"><NavbarButton>Crowdfunding</NavbarButton></Link>
+              <ConnectButton />
+              <NavbarUser>
+              <TiUserOutline color="white" fontSize="1.5rem" onMouseOver={openProfileModal} />
+              </NavbarUser>
+              <OpenLinksButton
+                onClick={() => {setClick((curr : any) => !curr);
+              }}
+              >
+                  {click ? <><MdClose color="white" fontSize="1.5rem" /></> : <>
+                  <GiHamburgerMenu color="white" fontSize="1.5rem" />
+              </>
+              }
+            </OpenLinksButton>
+          </NavbarLinkContainer>
+          </RightContainer>
+      </NavbarInnerContainer>
+      { click &&  (
+      <NavbarExtendedContainer>
+        <NavbarLinkExtended><Link href="/dao">DAO</Link></NavbarLinkExtended>
+        <NavbarLinkExtended><Link href="/Projects/Projects">Projects</Link></NavbarLinkExtended>
+        <NavbarLinkExtended onClick={openModal}>Join DAO</NavbarLinkExtended>
+        <NavbarLinkExtended><Link href="/Crowdfunding"><NavbarButtonExtended>Crowdfunding</NavbarButtonExtended></Link></NavbarLinkExtended>
+        <NavbarUserExtended>
+          <TiUserOutline color="white" fontSize="1.5rem" />
+        </NavbarUserExtended>
+      </NavbarExtendedContainer>
+      )}
+    </NavbarContainer>
+    {/* Profile Drop down */}
+        {/* <Dropdown /> */}
+        {/* Profile Drop down ends */}
+    </>
+    )
+}
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
 
     <NavbarContainer click={click}>
         {/* Modal component is here */}

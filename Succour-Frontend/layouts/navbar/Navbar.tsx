@@ -55,6 +55,7 @@ const Navbar = () => {
                </NavbarLink> */}
                
                <Link href="/Crowdfunding"><NavbarButton>Crowdfunding</NavbarButton></Link>
+<<<<<<< HEAD
                  {/* Custom Connection Button is here */}
                <Connection>
               <ConnectButton.Custom>
@@ -150,6 +151,9 @@ const Navbar = () => {
               </ConnectButton.Custom>
              </Connection>
              {/* End of Custom Connection Button */}
+=======
+               <ConnectButton />
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
                <NavbarUser>
                 <TiUserOutline color="white" fontSize="1.5rem" />
                </NavbarUser>
