@@ -8,14 +8,14 @@ import Footer from '../layouts/footer/Footer'
 
 const Crowdfunding = () => {
   return (
-     <>
-     <Navbar />
-     <About />
-     <Fundraisers />
-     <Mission />
-     <Giving />
-     <Footer />
-     </>
+    <>
+    <Navbar />
+    <About />
+    <Fundraisers />
+    <Mission />
+    <Giving />
+    <Footer />
+    </>
   )
 }
 

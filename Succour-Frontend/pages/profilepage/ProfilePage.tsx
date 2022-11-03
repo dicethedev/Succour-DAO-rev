@@ -21,6 +21,7 @@ const ProfilePage = () => {
     const [showModal, setShowModal] = useState(false);
     const [showDepositModal, setShowDepositModal] = useState(false);
 
+<<<<<<< HEAD
     const openModal = () => {
         setShowModal(prev => !prev);
     }
@@ -29,6 +30,19 @@ const ProfilePage = () => {
       setShowDepositModal(prev => !prev);
     }
 
+=======
+    const [showModal, setShowModal] = useState(false);
+    const [showDepositModal, setShowDepositModal] = useState(false);
+
+    const openModal = () => {
+        setShowModal(prev => !prev);
+    }
+
+    const openDepositModal = () => {
+      setShowDepositModal(prev => !prev);
+    }
+
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
 
     // read function for users details
 
@@ -43,6 +57,10 @@ const ProfilePage = () => {
 
     console.log(userProfile, "userProfile")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
     const {
         data: requestToWithdrawData,
         write: requestToWithdrawWrite,
@@ -62,7 +80,10 @@ const ProfilePage = () => {
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 8000
               })
+<<<<<<< HEAD
               router.push('/dao')
+=======
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
         },
         onError(data){
               console.log(data)
@@ -147,7 +168,10 @@ return (
                             Request to Withdraw
                         </button>
                         </>:
+<<<<<<< HEAD
                         // Custom Button begins here
+=======
+>>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
                         <div>
               <ConnectButton.Custom>
       {({

@@ -94,6 +94,7 @@ const DepositModal = ({ showDepositModal, setShowDepositModal } : IProps) => {
           <div className={styles.donate} ref={modalRef} onClick={closeModal}>
                {/* animating the whole container properties*/}
                 <animated.div style={animation}>
+                  {/* @ts-ignore */}
                <div className={styles.wrapper} showDepositModal={showDepositModal}>
                      <div className={styles.closeButton} onClick={() => setShowDepositModal((prev : any) => !prev)}></div>
                     <div className={styles.container}>

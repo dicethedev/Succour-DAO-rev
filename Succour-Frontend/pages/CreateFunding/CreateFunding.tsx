@@ -65,7 +65,7 @@ const CreateFunding = () => {
            <div className={styles.createfund}>
              <div className={styles.left_arrow}>
                 <div className={styles.back_arrow}>
-               <Link href="/Crowdfunding/Crowdfunding">
+               <Link href="/Crowdfunding">
                 <div className={styles.arrow}>
                     <Image src={arrowLeftSvg} alt="" />
                 </div>
