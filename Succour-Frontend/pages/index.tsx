@@ -35,7 +35,7 @@ const Home: NextPage = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 // whileHover={{ scale: 1.2 }} 
          className={styles.banner_logo}>
-         <Image src={Logo} />
+         <Image src={Logo} alt="" />
         </motion.div>
 
          <div 
