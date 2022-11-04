@@ -15,13 +15,10 @@ interface IProps {
 }
 
 const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
-<<<<<<< HEAD
+     
        const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
        const router = useRouter();
-=======
-  const SuccourAddress = "0x12F57C67FDd16109B549F0B40579694fE12bf9Fd"
 
->>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
        const modalRef = useRef<any | any>();
        const [ cancel, setCancel ] = useState(false);
       
@@ -60,7 +57,6 @@ const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
         contractInterface: Succour_abi,
         functionName: 'requestToWithdrawDAO'
     })
-<<<<<<< HEAD
 
     const {isLoading: rtwLoader} = useWaitForTransaction({
         hash: requestToWithdrawData?.hash,
@@ -79,10 +75,6 @@ const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
         }
     })
 
-    
-
-=======
-
     const {isLoading: rtwLoader} = useWaitForTransaction({
         hash: requestToWithdrawData?.hash,
         onSuccess(){
@@ -100,13 +92,10 @@ const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
         }
     })
 
->>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
     const handleSubmit = (e:any) => {
       e.preventDefault();
       requestToWithdrawWrite();
   }
-
-<<<<<<< HEAD
   const handleCancel = () => {
     router.push('/dao')
   }
@@ -114,10 +103,6 @@ const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
     return (
         <>
         <ToastContainer />
-=======
-    return (
-        <>
->>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
         {showModal ? (
         <div className={styles.withdraw} ref={modalRef} onClick={closeModal}>
               {/* animating the whole container properties*/}
@@ -141,15 +126,12 @@ const WithdrawAlert = ({ showModal, setShowModal } : IProps) => {
                         >
                         {(requestLoading || rtwLoader) ? "Loading..." : "Yes, request to Withdraw"}
                       </button>
-<<<<<<< HEAD
                         {/* <Link href="/profilepage/ProfilePage"> */}
                         <button className={styles.cancel_btn} onClick={handleCancel}>No, Cancel</button>
                         {/* </Link> */}
-=======
                         <Link href="/profilepage/ProfilePage">
                         <button className={styles.cancel_btn}>No, Cancel</button>
                         </Link>
->>>>>>> d32647a491f8e9a2b7f3ba4c8a15252d7da31dcf
                       </div>
                     
                     </div>
